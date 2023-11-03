@@ -6,3 +6,80 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+
+model User {
+  id          String      @id @default(uuid())
+  firstName   String
+  lastName    String
+  email       String  @unique
+  password    String
+  phone       String
+  role        role
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  blogs       Blog[]
+  likedBlogs  Like[]
+  comments    Comment[]
+
+  @@map("user")
+}
+
+enum role {
+  user 
+  admin
+}
+
+model Blog {
+  id           String       @id @default(uuid())
+  title        String
+  thumbnailImg String?
+  typeId       String
+  content      String
+  image        String?
+  userId       String
+  likeCount    String
+  comments     Comment[]
+  likes        Like[]
+  createdAt    DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+
+  user   User   @relation(fields: [userId], references: [id])
+  type   BlogType @relation(fields: [typeId], references: [id])
+
+  @@map("blog")
+}
+
+model BlogType {
+  id    String   @id @default(uuid())
+  title String
+  blog Blog[]
+
+  @@map("blogType")
+}
+
+model Like {
+  id     String @id @default(uuid())
+  userId String
+  blogId String
+
+  user User @relation(fields: [userId], references: [id])
+  blog Blog @relation(fields: [blogId], references: [id])
+
+  @@map("like")
+}
+
+model Comment {
+  id     String @id @default(uuid())
+  userId String
+  blogId String
+  text   String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  blog Blog @relation(fields: [blogId], references: [id])
+
+  @@map("comment")
+}
