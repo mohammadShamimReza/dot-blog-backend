@@ -1,56 +1,35 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
+import { Secret } from 'jsonwebtoken';
 import config from '../../config';
-import ApiError from '../../errors/apiError';
-import { JwtHelper } from '../../helpers/jwtHelper';
-import { IAuthUser } from '../../interfaces/auth';
-import { RedisClient } from '../../shared/redis';
+import ApiError from '../../errors/ApiError';
+import { jwtHelpers } from '../../helpers/jwtHelpers';
 
 const auth =
   (...requiredRoles: string[]) =>
-  async (req: any, res: Response, next: NextFunction) => {
-    return new Promise(async (resolve, reject) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      //get authorization token
       const token = req.headers.authorization;
-
       if (!token) {
-        return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized'));
+        throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized');
       }
+      // verify token
+      let verifiedUser = null;
 
-      const verifiedUser: IAuthUser | null = JwtHelper.verifyToken(token);
+      verifiedUser = jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
 
-      if (!verifiedUser) {
-        return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized'));
-      }
 
-      if (config.env !== 'development') {
-        const storedAccessToken = await RedisClient.getAccessToken(verifiedUser.id);
+      req.user = verifiedUser; // role  , userid
 
-        if (!storedAccessToken) {
-          return reject(
-            new ApiError(
-              httpStatus.UNAUTHORIZED,
-              'Use refresh token to get new access token or login again'
-            )
-          );
-        }
-
-        if (storedAccessToken !== token) {
-          return reject(
-            new ApiError(httpStatus.UNAUTHORIZED, 'Maybe you are using an old access token')
-          );
-        }
-      }
-
-      req.user = verifiedUser;
-
+      // role diye guard korar jnno
       if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
-        return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
+        throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden');
       }
-
-      resolve(verifiedUser);
-    })
-      .then(() => next())
-      .catch((err) => next(err));
+      next();
+    } catch (error) {
+      next(error);
+    }
   };
 
 export default auth;

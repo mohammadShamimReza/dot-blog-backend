@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
-import ApiError from '../../errors/apiError';
+import ApiError from '../../errors/ApiError';
 import handlePrismaClientKnownRequestError from '../../errors/handlePrismaClientKnownRequestError';
 import handlePrismaValidationError from '../../errors/handlePrismaValidationError';
 import handleZodError from '../../errors/handleZodError';

@@ -14,6 +14,8 @@ app.use(cookieParser());
 
 app.use('/api/v1', routes);
 
+console.log("hii")
+
 app.use(globalExceptionHandler);
 
 app.use((req, res, next) => {

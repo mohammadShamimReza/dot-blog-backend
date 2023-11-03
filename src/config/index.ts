@@ -1,32 +1,17 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { z } from 'zod';
 
 dotenv.config({ path: path.join(process.cwd(), '.env') });
-
-const envVarsZodSchema = z.object({
-  NODE_ENV: z.string(),
-  PORT: z
-    .string()
-    .default('3000')
-    .refine((val) => Number(val)),
-  DATABASE_URL: z.string(),
-  REDIS_URL: z.string(),
-  JWT_SECRET: z.string()
-});
-
-const envVars = envVarsZodSchema.parse(process.env);
-
 export default {
-  env: envVars.NODE_ENV,
-  port: envVars.PORT,
-  db: {
-    url: envVars.DATABASE_URL
-  },
-  redis: {
-    url: envVars.REDIS_URL
-  },
+  env: process.env.NODE_ENV,
+  port: process.env.PORT,
+  database_url: process.env.DATABASE_URL,
+  direct_url: process.env.DIRECT_URL,
+  bycrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
   jwt: {
-    secret: envVars.JWT_SECRET
-  }
+    secret: process.env.JWT_SECRET,
+    refresh_secret: process.env.JWT_REFRESH_SECRET,
+    expires_in: process.env.JWT_EXPIRES_IN,
+    refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
+  },
 };
