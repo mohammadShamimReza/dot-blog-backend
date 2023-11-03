@@ -1,33 +1,33 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
-import { UserController } from './User.controller';
-import { UserValidation } from './User.validation';
+import { BlogController } from './Blog.controller';
+import { BlogValidation } from './Blog.validation';
 
 const router = express.Router();
 
 router.get(
   '/:id',
   // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.USER),
-  UserController.getById
+  BlogController.getById
 );
 
 router.get(
   '/',
   // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  UserController.getAllFromDB
+  BlogController.getAllFromDB
 );
-router.post('/', validateRequest(UserValidation.create), UserController.createUser);
+router.post('/', validateRequest(BlogValidation.create), BlogController.createBlog);
 
 router.patch(
   '/:id',
   // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER, ENUM_USER_ROLE.SUPER_ADMIN),
-  validateRequest(UserValidation.update),
-  UserController.updateUser
+  validateRequest(BlogValidation.update),
+  BlogController.updateBlog
 );
 router.delete(
   '/:id',
   // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  UserController.deleteUser
+  BlogController.deleteBlog
 );
 
-export const userRoutes = router;
+export const blogRoutes = router;

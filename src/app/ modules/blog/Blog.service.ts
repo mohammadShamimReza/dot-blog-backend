@@ -1,13 +1,13 @@
-import { Prisma, User } from '@prisma/client';
+import { Blog, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { userSearchableFields } from './User.constants';
-import { IUserFilters } from './User.interface';
+import { userSearchableFields } from './Blog.constants';
+import { IUserFilters } from './Blog.interface';
 
-const createUser = async (payload: User): Promise<User> => {
-  const result = await prisma.user.create({ data: payload });
+const createBlog = async (payload: Blog): Promise<Blog> => {
+  const result = await prisma.blog.create({ data: payload });
   console.log(result, 'creating, user');
   return result;
 };
@@ -15,7 +15,7 @@ const createUser = async (payload: User): Promise<User> => {
 const getAllFromDb = async (
   filters: IUserFilters,
   paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<User[]>> => {
+): Promise<IGenericResponse<Blog[]>> => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(paginationOptions);
   const { searchTerm, ...filterData } = filters;
 
@@ -45,14 +45,14 @@ const getAllFromDb = async (
     });
   }
 
-  const whereConditions: Prisma.UserWhereInput =
+  const whereConditions: Prisma.BlogWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
 
-  const result = await prisma.user.findMany({
+  const result = await prisma.blog.findMany({
     include: {
-      blogs: true,
-      comments: true,
-      likedBlogs: true
+      // blogs: true,
+      // comments: true,
+      // likedBlogs: true
     },
     where: whereConditions,
     skip,
@@ -61,10 +61,10 @@ const getAllFromDb = async (
       paginationOptions.sortBy && paginationOptions.sortOrder
         ? { [paginationOptions.sortBy]: paginationOptions.sortOrder }
         : {
-            email: 'desc'
+            createdAt: 'desc'
           }
   });
-  const total = await prisma.user.count({
+  const total = await prisma.blog.count({
     where: whereConditions
   });
   return {
@@ -77,24 +77,20 @@ const getAllFromDb = async (
   };
 };
 
-const getById = async (id: string): Promise<User | null> => {
-  const result = await prisma.user.findUnique({
+const getById = async (id: string): Promise<Blog | null> => {
+  const result = await prisma.blog.findUnique({
     where: {
       id
     },
     include: {
-      blogs: {
-        include: {
-          comments: true
-        }
-      }
+      user: true
     }
   });
   return result;
 };
 
-const updateUser = async (id: string, payload: Partial<User>): Promise<User> => {
-  const result = await prisma.user.update({
+const updateBlog = async (id: string, payload: Partial<Blog>): Promise<Blog> => {
+  const result = await prisma.blog.update({
     where: {
       id
     },
@@ -103,8 +99,8 @@ const updateUser = async (id: string, payload: Partial<User>): Promise<User> => 
   return result;
 };
 
-const deleteUser = async (id: string): Promise<User> => {
-  const result = await prisma.user.delete({
+const deleteBlog = async (id: string): Promise<Blog> => {
+  const result = await prisma.blog.delete({
     where: {
       id
     },
@@ -115,10 +111,10 @@ const deleteUser = async (id: string): Promise<User> => {
   return result;
 };
 
-export const UserService = {
-  createUser,
+export const BlogService = {
+  createBlog,
   getAllFromDb,
   getById,
-  updateUser,
-  deleteUser
+  updateBlog,
+  deleteBlog
 };

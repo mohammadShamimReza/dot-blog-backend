@@ -1,22 +1,22 @@
-import { User } from '@prisma/client';
+import { Blog } from '@prisma/client';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { userFilterableFields } from './User.constants';
-import { UserService } from './User.service';
+import { userFilterableFields } from './Blog.constants';
+import { BlogService } from './Blog.service';
 
-const createUser = catchAsync(async (req: Request, res: Response) => {
+const createBlog = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   console.log(payload);
 
-  const result = await UserService.createUser(payload);
+  const result = await BlogService.createBlog(payload);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User created successfully',
+    message: 'Blog created successfully',
     data: result
   });
 });
@@ -25,54 +25,54 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, userFilterableFields);
   const paginationOptions = pick(req.query, paginationFields);
 
-  const result = await UserService.getAllFromDb(filters, paginationOptions);
+  const result = await BlogService.getAllFromDb(filters, paginationOptions);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User fetched successfully',
+    message: 'Blog fetched successfully',
     data: result
   });
 });
 
 const getById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await UserService.getById(id);
+  const result = await BlogService.getById(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User fetched successfully',
+    message: 'Blog fetched successfully',
     data: result
   });
 });
 
-const updateUser = catchAsync(async (req: Request, res: Response) => {
+const updateBlog = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const payload = req.body;
-  const result = await UserService.updateUser(id, payload);
+  const result = await BlogService.updateBlog(id, payload);
 
-  sendResponse<User>(res, {
+  sendResponse<Blog>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User update successfully',
+    message: 'Blog update successfully',
     data: result
   });
 });
-const deleteUser = catchAsync(async (req: Request, res: Response) => {
+const deleteBlog = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const result = await UserService.deleteUser(id);
+  const result = await BlogService.deleteBlog(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'User delete successfully',
+    message: 'Blog delete successfully',
     data: result
   });
 });
 
-export const UserController = {
-  createUser,
+export const BlogController = {
+  createBlog,
   getAllFromDB,
   getById,
-  updateUser,
-  deleteUser
+  updateBlog,
+  deleteBlog
 };

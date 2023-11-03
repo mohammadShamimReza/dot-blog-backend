@@ -38,9 +38,7 @@ model Blog {
   thumbnailImg String?
   typeId       String
   content      String
-  image        String?
   userId       String
-  likeCount    String
   comments     Comment[]
   likes        Like[]
   createdAt    DateTime @default(now())

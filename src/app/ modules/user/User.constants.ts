@@ -5,21 +5,9 @@ export const userFilterableFields = [
   'lastName',
   'email',
   'phone',
-  'role',
-  'contactNo',
-
-  'address',
+  'role'
 ];
 
-export const userSearchableFields = [
-  'firstName',
-  'lastName',
-  'email',
-  'phone',
-  'role',
-  'contactNo',
-
-  'address',
-];
+export const userSearchableFields = ['firstName', 'lastName', 'email', 'phone', 'role'];
 
 export const userRelationalFields: string[] = [''];
