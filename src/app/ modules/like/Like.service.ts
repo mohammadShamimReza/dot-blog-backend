@@ -1,9 +1,8 @@
-import { BlogType } from '@prisma/client';
+import { Like } from '@prisma/client';
 import prisma from '../../../shared/prisma';
 
-const createBlogType = async (payload: BlogType): Promise<BlogType> => {
-  const result = await prisma.blogType.create({ data: payload });
-  console.log(result, 'creating, user');
+const createLike = async (payload: Like): Promise<Like> => {
+  const result = await prisma.like.create({ data: payload });
   return result;
 };
 
@@ -98,22 +97,19 @@ const createBlogType = async (payload: BlogType): Promise<BlogType> => {
 //   return result;
 // };
 
-// const deleteBlog = async (id: string): Promise<Blog> => {
-//   const result = await prisma.blog.delete({
-//     where: {
-//       id
-//     },
-//     include: {
-//       _count: true
-//     }
-//   });
-//   return result;
-// };
+const deleteLike = async (id: string): Promise<Like> => {
+  const result = await prisma.like.delete({
+    where: {
+      id
+    }
+  });
+  return result;
+};
 
-export const BlogTypeService = {
-  createBlogType
+export const LikeService = {
+  createLike,
   // getAllFromDb,
   // getById,
   // updateBlog,
-  // deleteBlog
+  deleteLike
 };

@@ -11,11 +11,11 @@ const router = express.Router();
 //   BlogController.getById
 // );
 
-// router.get(
-//   '/',
-//   // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-//   BlogController.getAllFromDB
-// );
+router.get(
+  '/',
+  // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  BlogTypeController.getAllFromDB
+);
 router.post('/', validateRequest(BlogTypeValidation.create), BlogTypeController.createBlogType);
 
 // router.patch(
@@ -24,10 +24,10 @@ router.post('/', validateRequest(BlogTypeValidation.create), BlogTypeController.
 //   validateRequest(BlogTypeValidation.update),
 //   BlogTypeController.updateBlogType
 // );
-// router.delete(
-//   '/:id',
-//   // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-//   BlogController.deleteBlog
-// );
+router.delete(
+  '/:id',
+  // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  BlogTypeController.deleteBlogType
+);
 
 export const blogTypeRoutes = router;

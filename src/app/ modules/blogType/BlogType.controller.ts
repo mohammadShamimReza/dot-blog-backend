@@ -17,18 +17,15 @@ const createBlogType = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-//   const filters = pick(req.query, userFilterableFields);
-//   const paginationOptions = pick(req.query, paginationFields);
-
-//   const result = await BlogService.getAllFromDb(filters, paginationOptions);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Blog fetched successfully',
-//     data: result
-//   });
-// });
+const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await BlogTypeService.getAllFromDb();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Blog fetched successfully',
+    data: result
+  });
+});
 
 // const getById = catchAsync(async (req: Request, res: Response) => {
 //   const { id } = req.params;
@@ -53,22 +50,22 @@ const createBlogType = catchAsync(async (req: Request, res: Response) => {
 //     data: result
 //   });
 // });
-// const deleteBlog = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id;
-//   const result = await BlogService.deleteBlog(id);
+const deleteBlogType = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await BlogTypeService.deleteBlogType(id);
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Blog delete successfully',
-//     data: result
-//   });
-// });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Blog type delete successfully',
+    data: result
+  });
+});
 
 export const BlogTypeController = {
-  createBlogType
-  // getAllFromDB,
+  createBlogType,
+  getAllFromDB,
   // getById,
   // updateBlog,
-  // deleteBlog
+  deleteBlogType
 };

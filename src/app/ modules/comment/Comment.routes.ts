@@ -1,7 +1,7 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
-import { BlogTypeController } from './BlogType.controller';
-import { BlogTypeValidation } from './BlogType.validation';
+import { BlogTypeController } from './Comment.controller';
+import { BlogTypeValidation } from './Comment.validation';
 
 const router = express.Router();
 

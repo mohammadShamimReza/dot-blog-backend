@@ -1,7 +1,7 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
-import { BlogTypeController } from './BlogType.controller';
-import { BlogTypeValidation } from './BlogType.validation';
+import { LikeController } from './Like.controler';
+import { LikeValidation } from './Like.validation';
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ const router = express.Router();
 //   // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
 //   BlogController.getAllFromDB
 // );
-router.post('/', validateRequest(BlogTypeValidation.create), BlogTypeController.createBlogType);
+router.post('/', validateRequest(LikeValidation.create), LikeController.createLike);
 
 // router.patch(
 //   '/:id',
@@ -24,10 +24,10 @@ router.post('/', validateRequest(BlogTypeValidation.create), BlogTypeController.
 //   validateRequest(BlogTypeValidation.update),
 //   BlogTypeController.updateBlogType
 // );
-// router.delete(
-//   '/:id',
-//   // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-//   BlogController.deleteBlog
-// );
+router.delete(
+  '/:id',
+  // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  LikeController.deleteLike
+);
 
-export const blogTypeRoutes = router;
+export const likeRoutes = router;
