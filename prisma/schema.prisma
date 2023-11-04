@@ -17,7 +17,6 @@ model User {
   password    String
   phone       String
   role        role
-  address     String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   blogs       Blog[]

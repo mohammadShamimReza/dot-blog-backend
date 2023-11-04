@@ -7,8 +7,8 @@ import { userSearchableFields } from './User.constants';
 import { IUserFilters } from './User.interface';
 
 const createUser = async (payload: User): Promise<User> => {
-  const result = await prisma.user.create({ data: payload });
-  console.log(result, 'creating, user');
+
+    const result = await prisma.user.create({ data: payload });
   return result;
 };
 

@@ -9,8 +9,8 @@ const create = z.object({
     phone: z.string({ required_error: 'firstName is required' }),
     role: z.string({ required_error: 'firstName is required' }),
 
-    address: z.string({ required_error: 'firstName is required' }),
-  }),
+    address: z.string({ required_error: 'firstName is required' })
+  })
 });
 
 const update = z.object({
