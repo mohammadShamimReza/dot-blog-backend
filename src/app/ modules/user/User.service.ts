@@ -51,7 +51,7 @@ const getAllFromDb = async (
   const result = await prisma.user.findMany({
     include: {
       blogs: true,
-      comments: true,
+      review: true,
       likedBlogs: true
     },
     where: whereConditions,
@@ -85,7 +85,7 @@ const getById = async (id: string): Promise<User | null> => {
     include: {
       blogs: {
         include: {
-          comments: true
+          review: true
         }
       }
     }
