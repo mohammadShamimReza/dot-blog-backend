@@ -22,7 +22,8 @@ model User {
   updatedAt   DateTime @updatedAt
   blogs       Blog[]
   likedBlogs  Like[]
-  comments    Comment[]
+  review    Reviews[]
+  readLater   ReadLater[]
 
   @@map("user")
 }
@@ -39,14 +40,16 @@ model Blog {
   typeId       String
   content      String
   userId       String
-  comments     Comment[]
+  review     Reviews[]
   likes        Like[]
+  readLater    ReadLater[]
   createdAt    DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
 
   user   User   @relation(fields: [userId], references: [id])
   type   BlogType @relation(fields: [typeId], references: [id])
+
 
   @@map("blog")
 }
@@ -70,7 +73,7 @@ model Like {
   @@map("like")
 }
 
-model Comment {
+model Reviews {
   id     String @id @default(uuid())
   userId String
   blogId String
@@ -80,5 +83,17 @@ model Comment {
   user User @relation(fields: [userId], references: [id])
   blog Blog @relation(fields: [blogId], references: [id])
 
-  @@map("comment")
+  @@map("reviews")
 }
+
+model ReadLater {
+  id     String @id @default(uuid())
+  userId String
+  blogId String
+
+  user User @relation(fields: [userId], references: [id])
+  blog Blog @relation(fields: [blogId], references: [id])
+
+  @@map("readLater")
+}
+

@@ -2,17 +2,17 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
-import { BlogTypeService } from './Comment.service';
+import { ReadLaterService } from './ReadLater.service';
 
-const createBlogType = catchAsync(async (req: Request, res: Response) => {
+const createReadLater = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   console.log(payload);
 
-  const result = await BlogTypeService.createBlogType(payload);
+  const result = await ReadLaterService.createReadLater(payload);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Blog Type created successfully',
+    message: 'ReadLater created successfully',
     data: result
   });
 });
@@ -53,22 +53,23 @@ const createBlogType = catchAsync(async (req: Request, res: Response) => {
 //     data: result
 //   });
 // });
-// const deleteBlog = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id;
-//   const result = await BlogService.deleteBlog(id);
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Blog delete successfully',
-//     data: result
-//   });
-// });
+const deleteReadLater = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await ReadLaterService.deleteReadLater(id);
 
-export const BlogTypeController = {
-  createBlogType
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'ReadLater delete successfully',
+    data: result
+  });
+});
+
+export const ReadLaterController = {
+  createReadLater,
   // getAllFromDB,
   // getById,
   // updateBlog,
-  // deleteBlog
+  deleteReadLater
 };

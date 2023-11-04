@@ -1,9 +1,8 @@
-import { BlogType } from '@prisma/client';
+import { ReadLater } from '@prisma/client';
 import prisma from '../../../shared/prisma';
 
-const createBlogType = async (payload: BlogType): Promise<BlogType> => {
-  const result = await prisma.blogType.create({ data: payload });
-  console.log(result, 'creating, user');
+const createReadLater = async (payload: ReadLater): Promise<ReadLater> => {
+  const result = await prisma.readLater.create({ data: payload });
   return result;
 };
 
@@ -47,7 +46,7 @@ const createBlogType = async (payload: BlogType): Promise<BlogType> => {
 //     include: {
 //       // blogs: true,
 //       // comments: true,
-//       // likedBlogs: true
+//       // ReadLaterdBlogs: true
 //     },
 //     where: whereConditions,
 //     skip,
@@ -98,22 +97,19 @@ const createBlogType = async (payload: BlogType): Promise<BlogType> => {
 //   return result;
 // };
 
-// const deleteBlog = async (id: string): Promise<Blog> => {
-//   const result = await prisma.blog.delete({
-//     where: {
-//       id
-//     },
-//     include: {
-//       _count: true
-//     }
-//   });
-//   return result;
-// };
+const deleteReadLater = async (id: string): Promise<ReadLater> => {
+  const result = await prisma.readLater.delete({
+    where: {
+      id
+    }
+  });
+  return result;
+};
 
-export const BlogTypeService = {
-  createBlogType
+export const ReadLaterService = {
+  createReadLater,
   // getAllFromDb,
   // getById,
   // updateBlog,
-  // deleteBlog
+  deleteReadLater
 };
