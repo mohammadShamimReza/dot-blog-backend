@@ -6,6 +6,7 @@ import ApiError from '../../../errors/ApiError';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import prisma from '../../../shared/prisma';
 import { IChangePassword } from './auth.interface';
+import { sendEmail } from './sendResetMail';
 
 const signUp = async (data: User) => {
   const result = await prisma.user.create({
@@ -72,31 +73,120 @@ const logIn = async (LoginData: { email: string; password: string }) => {
   };
 };
 
-const changePassword = async (user: JwtPayload | null, payload: IChangePassword): Promise<void> => {
+const changePassword = async (user: JwtPayload | null, payload: IChangePassword): Promise<User> => {
   const { oldPassword, newPassword } = payload;
 
-  console.log(user, payload, 'from chenge password');
+  const isUserExist = await prisma.user.findUnique({
+    where: {
+      id: user?.id
+    }
+  });
 
-  // const isUserExist = await User.findOne({ id: user?.userId }).select('+password');
-
-  // if (!isUserExist) {
-  //   throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
-  // }
-
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+  }
   // // checking old password
-  // if (isUserExist.password && !(await User.isPasswordMatched(oldPassword, isUserExist.password))) {
-  //   throw new ApiError(httpStatus.UNAUTHORIZED, 'Old Password is incorrect');
+  if (isUserExist.password !== oldPassword) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Old Password is incorrect');
+  }
+
+  const result = await prisma.user.update({
+    where: {
+      id: user?.id
+    },
+    data: {
+      password: newPassword
+    }
+  });
+
+  return result;
+};
+
+const forgotPass = async (payload: { email: string }) => {
+  const isUserExist = await prisma.user.findFirst({
+    where: {
+      email: payload.email
+    }
+  });
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User does not exist!');
+  }
+
+  // let profile = null;
+  // if (user.role === ENUM_USER_ROLE.ADMIN) {
+  //   profile = await Admin.findOne({ id: user.id })
+  // }
+  // else if (user.role === ENUM_USER_ROLE.FACULTY) {
+  //   profile = await Faculty.findOne({ id: user.id })
+  // }
+  // else if (user.role === ENUM_USER_ROLE.STUDENT) {
+  //   profile = await Student.findOne({ id: user.id })
   // }
 
-  // isUserExist.password = newPassword;
-  // isUserExist.needsPasswordChange = false;
+  // if (!profile) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, "Pofile not found!")
+  // }
 
-  // // updating using save()
-  // isUserExist.save();
+  // if (!profile.email) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, "Email not found!")
+  // }
+
+  const passResetToken = await jwtHelpers.createResetToken(
+    { id: isUserExist.id },
+    config.jwt.secret as string,
+    '50m'
+  );
+
+  const resetLink: string = config.resetlink + `token=${passResetToken}`;
+
+  await sendEmail(
+    isUserExist.email,
+    `
+      <div>
+        <p>Hi, ${isUserExist.firstName}</p>
+        <p>Your password reset link: <a href=${resetLink}>Click Here</a></p>
+        <p>Thank you</p>
+      </div>
+  `
+  );
+
+  return {
+    message: 'Check your email!'
+  };
+};
+
+const resetPassword = async (payload: { id: string; newPassword: string }, token: string) => {
+  const { id, newPassword } = payload;
+  const user = await prisma.user.findUnique({
+    where: {
+      email: payload.id
+    }
+  });
+
+  if (!user) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!');
+  }
+
+  const isVarified = await jwtHelpers.verifyToken(token, config.jwt.secret as string);
+
+  // const password = await bcrypt.hash(newPassword, Number(config.bycrypt_salt_rounds));
+
+  const result = await prisma.user.update({
+    where: {
+      id: user?.id
+    },
+    data: {
+      password: newPassword
+    }
+  });
+
+  return result;
 };
 
 export const AuthService = {
   signUp,
   logIn,
-  changePassword
+  changePassword,
+  forgotPass,
+  resetPassword
 };
