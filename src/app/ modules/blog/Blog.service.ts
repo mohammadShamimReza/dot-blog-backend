@@ -1,6 +1,5 @@
 import { Blog, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
-import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
 import { userSearchableFields } from './Blog.constants';
@@ -12,11 +11,9 @@ const createBlog = async (payload: Blog): Promise<Blog> => {
   return result;
 };
 
-const getAllFromDb = async (
-  filters: IUserFilters,
-  paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<Blog[]>> => {
+const getAllFromDb = async (filters: IUserFilters, paginationOptions: IPaginationOptions) => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(paginationOptions);
+  console.log(limit);
   const { searchTerm, ...filterData } = filters;
 
   const andConditions = [];
@@ -49,11 +46,7 @@ const getAllFromDb = async (
     andConditions.length > 0 ? { AND: andConditions } : {};
 
   const result = await prisma.blog.findMany({
-    include: {
-      // blogs: true,
-      // comments: true,
-      // likedBlogs: true
-    },
+    include: {},
     where: whereConditions,
     skip,
     take: limit,
@@ -83,7 +76,8 @@ const getById = async (id: string): Promise<Blog | null> => {
       id
     },
     include: {
-      user: true
+      user: true,
+      review: true
     }
   });
   return result;
