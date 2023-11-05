@@ -2,26 +2,28 @@ import { z } from 'zod';
 
 const create = z.object({
   body: z.object({
-    firstName: z.string({
-      required_error: 'First name id is required',
+    name: z.string({
+      required_error: ' name id is required'
     }),
-    lastName: z.string({
-      required_error: 'lastName id is required',
+    designation: z.string({
+      required_error: 'designation id is required'
+    }),
+    experience: z.string({
+      required_error: 'experience id is required'
     }),
     email: z.string({
-      required_error: 'Email is required',
+      required_error: 'Email is required'
     }),
     password: z.string({
-      required_error: 'password is required',
+      required_error: 'password is required'
     }),
     role: z.string({
-      required_error: 'role is required',
+      required_error: 'role is required'
     }),
     phone: z.string({
-      required_error: 'phone is required',
-    }),
- 
-  }),
+      required_error: 'phone is required'
+    })
+  })
 });
 
 const login = z.object({
