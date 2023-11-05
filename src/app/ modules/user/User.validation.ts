@@ -37,7 +37,10 @@ const update = z.object({
     phone: z.string().optional(),
     role: z.string().optional(),
     contactNo: z.string().optional(),
-    address: z.string().optional()
+    address: z.string().optional(),
+    linkedIn: z.string().optional(),
+    github: z.string().optional(),
+    profileImg: z.string().optional()
   })
 });
 
