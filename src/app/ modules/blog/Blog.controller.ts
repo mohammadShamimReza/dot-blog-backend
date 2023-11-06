@@ -10,7 +10,6 @@ import { BlogService } from './Blog.service';
 
 const createBlog = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
-  console.log(payload);
 
   const result = await BlogService.createBlog(payload);
   sendResponse(res, {

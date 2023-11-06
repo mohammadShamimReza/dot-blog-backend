@@ -6,7 +6,6 @@ import { LikeService } from './Like.service';
 
 const createLike = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
-  console.log(payload);
 
   const result = await LikeService.createLike(payload);
   sendResponse(res, {

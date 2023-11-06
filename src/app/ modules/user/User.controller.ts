@@ -10,9 +10,7 @@ import { UserService } from './User.service';
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
-      console.log(payload, 'creating, user');
 
-  console.log(payload);
 
   const result = await UserService.createUser(payload);
   sendResponse(res, {

@@ -7,7 +7,6 @@ import { ReviewsService } from './Reviews.service';
 
 const createReviews = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
-  console.log(payload);
 
   const result = await ReviewsService.createReviews(payload);
   sendResponse(res, {

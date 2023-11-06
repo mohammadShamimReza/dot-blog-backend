@@ -6,7 +6,6 @@ import { ReadLaterService } from './ReadLater.service';
 
 const createReadLater = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
-  console.log(payload);
 
   const result = await ReadLaterService.createReadLater(payload);
   sendResponse(res, {

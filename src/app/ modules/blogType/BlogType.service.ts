@@ -3,7 +3,6 @@ import prisma from '../../../shared/prisma';
 
 const createBlogType = async (payload: BlogType): Promise<BlogType> => {
   const result = await prisma.blogType.create({ data: payload });
-  console.log(result, 'creating, user');
   return result;
 };
 

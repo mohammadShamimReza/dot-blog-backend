@@ -7,13 +7,11 @@ import { IUserFilters } from './Blog.interface';
 
 const createBlog = async (payload: Blog): Promise<Blog> => {
   const result = await prisma.blog.create({ data: payload });
-  console.log(result, 'creating, user');
   return result;
 };
 
 const getAllFromDb = async (filters: IUserFilters, paginationOptions: IPaginationOptions) => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(paginationOptions);
-  console.log(limit);
   const { searchTerm, ...filterData } = filters;
 
   const andConditions = [];
