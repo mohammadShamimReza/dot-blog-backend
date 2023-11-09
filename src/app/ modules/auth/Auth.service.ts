@@ -143,7 +143,7 @@ const forgotPass = async (payload: { email: string }) => {
     isUserExist.email,
     `
       <div>
-        <p>Hi, ${isUserExist.firstName}</p>
+        <p>Hi, ${isUserExist.name}</p>
         <p>Your password reset link: <a href=${resetLink}>Click Here</a></p>
         <p>Thank you</p>
       </div>

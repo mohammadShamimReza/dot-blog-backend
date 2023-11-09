@@ -1,12 +1,19 @@
+-- CreateEnum
+CREATE TYPE "role" AS ENUM ('user', 'admin');
+
 -- CreateTable
 CREATE TABLE "user" (
-    "id" SERIAL NOT NULL,
-    "firstName" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "designation" TEXT NOT NULL,
+    "experience" TEXT NOT NULL,
+    "linkedIn" TEXT,
+    "github" TEXT,
+    "profileImg" TEXT,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "profileImg" TEXT,
-    "role" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "role" "role" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -15,22 +22,21 @@ CREATE TABLE "user" (
 
 -- CreateTable
 CREATE TABLE "blog" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "thumbnailImg" TEXT,
-    "typeId" INTEGER NOT NULL,
+    "typeId" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "image" TEXT,
-    "userId" INTEGER NOT NULL,
-    "likeCount" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "blog_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "blogType" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
 
     CONSTRAINT "blogType_pkey" PRIMARY KEY ("id")
@@ -38,22 +44,31 @@ CREATE TABLE "blogType" (
 
 -- CreateTable
 CREATE TABLE "like" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "blogId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "blogId" TEXT NOT NULL,
 
     CONSTRAINT "like_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "comment" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "blogId" INTEGER NOT NULL,
+CREATE TABLE "reviews" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "blogId" TEXT NOT NULL,
     "text" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "comment_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "reviews_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "readLater" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "blogId" TEXT NOT NULL,
+
+    CONSTRAINT "readLater_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -72,7 +87,13 @@ ALTER TABLE "like" ADD CONSTRAINT "like_userId_fkey" FOREIGN KEY ("userId") REFE
 ALTER TABLE "like" ADD CONSTRAINT "like_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "blog"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "comment" ADD CONSTRAINT "comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "reviews" ADD CONSTRAINT "reviews_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "comment" ADD CONSTRAINT "comment_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "blog"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "reviews" ADD CONSTRAINT "reviews_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "blog"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "readLater" ADD CONSTRAINT "readLater_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "readLater" ADD CONSTRAINT "readLater_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "blog"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

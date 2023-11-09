@@ -9,7 +9,7 @@ const app: Application = express();
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.header(
     'Access-Control-Allow-Origin',
-    'http://localhost:3000'
+    'https://dot-blog-frontend.vercel.app/'
     // 'https://dot-travel-frontend.vercel.app',
   ); // Replace with your frontend origin.
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -17,6 +17,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
