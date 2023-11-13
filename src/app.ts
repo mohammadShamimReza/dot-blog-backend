@@ -1,4 +1,5 @@
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import globalExceptionHandler from './app/middlewares/globalExceptionHandler';
@@ -9,14 +10,23 @@ const app: Application = express();
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.header(
     'Access-Control-Allow-Origin',
-    'https://dot-blog-frontend.vercel.app/'
+    // 'https://dot-blog-frontend.vercel.app/'
     // 'https://dot-travel-frontend.vercel.app',
+    'http://localhost:3000'
   ); // Replace with your frontend origin.
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT,PATCH, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+
+app.use(
+  cors({
+    // origin: 'https://dot-blog-frontend.vercel.app',
+    origin: 'http://localhost:3000',
+    credentials: true
+  })
+);
 
 
 

@@ -112,25 +112,6 @@ const forgotPass = async (payload: { email: string }) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User does not exist!');
   }
 
-  // let profile = null;
-  // if (user.role === ENUM_USER_ROLE.ADMIN) {
-  //   profile = await Admin.findOne({ id: user.id })
-  // }
-  // else if (user.role === ENUM_USER_ROLE.FACULTY) {
-  //   profile = await Faculty.findOne({ id: user.id })
-  // }
-  // else if (user.role === ENUM_USER_ROLE.STUDENT) {
-  //   profile = await Student.findOne({ id: user.id })
-  // }
-
-  // if (!profile) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, "Pofile not found!")
-  // }
-
-  // if (!profile.email) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, "Email not found!")
-  // }
-
   const passResetToken = await jwtHelpers.createResetToken(
     { id: isUserExist.id },
     config.jwt.secret as string,
@@ -167,7 +148,7 @@ const resetPassword = async (payload: { id: string; newPassword: string }, token
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!');
   }
 
-  const isVarified = await jwtHelpers.verifyToken(token, config.jwt.secret as string);
+  // const isVarified = await jwtHelpers.verifyToken(token, config.jwt.secret as string);
 
   // const password = await bcrypt.hash(newPassword, Number(config.bycrypt_salt_rounds));
 
