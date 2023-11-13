@@ -10,9 +10,8 @@ const app: Application = express();
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.header(
     'Access-Control-Allow-Origin',
-    // 'https://dot-blog-frontend.vercel.app/'
+    'https://dot-blog-frontend.vercel.app/'
     // 'https://dot-travel-frontend.vercel.app',
-    'http://localhost:3000'
   ); // Replace with your frontend origin.
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT,PATCH, DELETE');
@@ -22,8 +21,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use(
   cors({
-    // origin: 'https://dot-blog-frontend.vercel.app',
-    origin: 'http://localhost:3000',
+    origin: 'https://dot-blog-frontend.vercel.app',
     credentials: true
   })
 );
